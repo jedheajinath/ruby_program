@@ -1,0 +1,106 @@
+Hi Ajinath,
+
+Please go through the below requirement and complete the below assignment today before EOD. Let me know if you need more or less time.
+
+Space Currency Calculations
+
+Instructions:
+
+    For the solution, use Ruby.
+
+    Assessment will be on a number of things including the design aspect of your solution and your object oriented programming skills. Whilst these are small problems, we expect you to submit what you believe is “production-quality” code that you would be able to run, maintain and evolve. You don’t need to “gold plate” your solution, but we are looking for something more than a bare-bones algorithm. You should submit code that you would be happy to produce in a real project, or that you would be happy to receive from a colleague.
+
+
+    You may use external libraries or tools for building or testing purposes.  Specifically, you may use unit testing libraries or build tools available for your chosen language (e.g., JUnit, Ant, NUnit, NAnt, Test::Unit, Rake etc.)
+
+
+    Optionally, you may also include a brief explanation of your design and assumptions along with your code.
+
+
+    Kindly note that we are NOT expecting a web-based application or a comprehensive UI. Rather, we are expecting a simple, console based application and interested in your source code.
+
+
+
+Introduction To The Problem
+
+All problems below require some kind of input. You are free to implement any mechanism for feeding input into your solution (for example, using hard coded data within a unit test). You should provide sufficient evidence that your solution is complete by, as a minimum, indicating that it works correctly against the supplied test data.
+
+Problem: Merchant's Guide To The Galaxy
+
+You decided to give up on earth after the latest financial collapse left 99.99% of the earth's population with 0.01% of the wealth. Luckily, with the scant sum of money that is left in your account, you are able to afford to rent a spaceship, leave earth, and fly all over the galaxy to sell common metals and dirt (which apparently is worth a lot).Buying and selling over the galaxy requires you to convert numbers and units, and you decided to write a program to help you.The numbers used for intergalactic transactions follows similar convention to the roman numerals and you have painstakingly collected the appropriate translation between them.Roman numerals are based on seven symbols:
+
+Symbol
+
+
+Value
+
+I - 1
+
+V - 5
+
+X - 10
+
+L - 50
+
+C - 100
+
+D - 500
+
+M - 1,000
+
+Numbers are formed by combining symbols together and adding the values. For example, MMVI is 1000 + 1000 + 5 + 1 = 2006. Generally, symbols are placed in order of value, starting with the largest values. When smaller values precede larger values, the smaller values are subtracted from the larger values, and the result is added to the total. For example MCMXLIV = 1000 + (1000 − 100) + (50 − 10) + (5 − 1) = 1944.
+
+    The symbols "I", "X", "C", and "M" can be repeated three times in succession, but no more. (They may appear four times if the third and fourth are separated by a smaller value, such as XXXIX.) "D", "L", and "V" can never be repeated.
+
+    "I" can be subtracted from "V" and "X" only. "X" can be subtracted from "L" and "C" only. "C" can be subtracted from "D" and "M" only. "V", "L", and "D" can never be subtracted.
+
+    Only one small-value symbol may be subtracted from any large-value symbol.
+
+    A number written in Arabic numerals can be broken into digits. For example, 1903 is composed of 1, 9, 0, and 3. To write the Roman numeral, each of the non-zero digits should be treated separately. In the above example, 1,000 = M, 900 = CM, and 3 = III. Therefore, 1903 = MCMIII.
+
+
+-- Source: Wikipedia (http://en.wikipedia.org/wiki/Roman_numerals) Input to your program consists of lines of text detailing your notes on the conversion between intergalactic units and roman numerals. You are expected to handle invalid queries appropriately.
+
+Test input:
+
+glob is I
+
+prok is V
+
+pish is X
+
+tegj is L
+
+glob glob Silver is 34 Credits
+
+glob prok Gold is 57800 Credits
+
+pish pish Iron is 3910 Credits
+
+how much is pish tegj glob glob ?
+
+how many Credits is glob prok Silver ?
+
+how many Credits is glob prok Gold ?
+
+how many Credits is glob prok Iron ?
+
+how much wood could a woodchuck chuck if a woodchuck could chuck wood ?
+
+Test Output:
+
+pish tegj glob glob is 42
+
+glob prok Silver is 68 Credits
+
+glob prok Gold is 57800 Credits
+
+glob prok Iron is 782 Credits
+I have no idea what you are talking about
+
+Please let me know in case of any clarifications.
+
+--
+Thanks and regards,
+Sumit Munot
+Senior ROR Developer
