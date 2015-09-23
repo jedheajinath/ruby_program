@@ -1,9 +1,10 @@
 hash = { 'I' => 1, 'V' => 5, 'X' => 10, 'L' => 50 ,'C' => 100,'D' => 500, 'M' => 1000 }
-test_hash = {}
+new_roman_hash = {}
+
 def check_ixcm?(char, number, hash)
   count = 0
   flag = true
-  number.each_char.with_index do |ch,index|
+  number.each_with_index do |ch,index|
     ch == char ? count +=1 : count = 0
     if index < number.length - 1 && count == 3
       if hash[ch] > hash[number[index+1]]
@@ -12,7 +13,7 @@ def check_ixcm?(char, number, hash)
         return false
       end
     elsif (ch == 'I' || ch == 'X' || ch == 'C') && count == 2 && index < number.length - 1
-      return false if hash[number[index+1]] > 1
+      return false if hash[number[index+1]] > hash[number[index]]
     end
   end
   return true
@@ -34,12 +35,12 @@ def get_possible_sub(char)
   return array
 end
 
-def calculate(number,hash)
+def calculate(number,hash,new_roman_hash)
   stack = []
   flag = true
   max = hash[number[0]]
-  number.each_char do |char|
-    if char == 'D' || char == 'L' || char == 'V'
+  number.each do |char|
+    if char == 'D' ||  char == 'L' || char == 'V'
       if number.count(char) > 1 ? true : false
         puts "Invalid Romam number !!! #{char} can't appear more than once"
         flag = false
@@ -73,94 +74,162 @@ def calculate(number,hash)
     else
       puts "Invalid Roman Number"
       flag = false
-      break
     end
   end
-  puts "Roman number is :#{stack.inject(:+)}" if flag
-end
 
-puts "Enter Roman Number :"
-number = gets.chomp.upcase
-calculate(number,hash)
-puts "---------------------------------------------------------------------"
-
-print "Enter how many test input :"
-number = gets.chomp.to_i
-for i in 1..number
-  print "Enter #{i} Test input :"
-  test_input = gets.chomp.upcase
-  result = test_input.split(" ")
-  result.delete_at(1)
-  if hash.has_key?(result[1])
-    hash[result[0]] = hash[result[1]]
+  if flag
+    # puts "Roman number is :#{stack.inject(:+)}"
+    return stack.inject(:+)
   else
-    puts "Invalid Test case"
-    puts "valid : glob is I"
+    return false
   end
 end
-p hash
-puts "---------------------------------------------------------------------"
 
-print "Enter how many creadit details :"
-number = gets.chomp.to_i
-for i in 1..number
-  print "Enter #{i} Credit Input:"
-  credit_input = gets.chomp.upcase
-  result = credit_input.sub("CREDITS","").split(" ")
-  result.delete_at(-2)
-  max = 0
-  results = 0
-  flag = true
-  for key in 0...result.length - 2
-    if hash.include?(result[key])
-      if hash[result[key]] > max
-        results = hash[result[key]] - results
+
+def get_test_input(hash, new_roman_hash)
+  print "Enter how many test input :"
+  number = gets.chomp.to_i
+  for i in 1..number
+    print "Enter #{i} Test input :"
+    test_input = gets.chomp.upcase
+
+    begin
+      test_input_array = test_input.split(" ")
+      test_input_array.delete_at(1)
+      if test_input_array.length > 2
+        raise "Please Enter Roman number"
+      # check if key is alerady exist new new roman
+      elsif new_roman_hash.key?(test_input_array.first)
+        raise "#{test_input_array.first} alerady exist !! "
+      # check if value is alerady exist new new roman
+      elsif new_roman_hash.has_value?(test_input_array.last)
+        raise "value #{test_input_array.last} alerady taken !! "
+      # check if key is alerady exist roman number
+      elsif hash.has_key?(test_input_array.last)
+        hash[test_input_array.first] = hash[test_input_array.last]
+      # new_roman_hash[test_input_array.first] = new_roman_hash[test_input_array.last]
       else
-        results += hash[result[key]]
+        raise "Invalid input !!"
       end
-      max = hash[result[key]]
-    else
-      puts "!!!! Invalid Expression !!!!!"
-      flag = false
-      break
+    rescue Exception => e
+      puts "#{e.message}"
+      puts "Invalid Test case"
+      puts "valid : glob is I"
     end
   end
-  if flag && !result.empty?
-    hash[result[result.length - 2]] = result[-1].to_f / results
-    test_hash[result[result.length - 2]] = result[-1].to_f / results
+end
+
+def get_credits_details(hash,new_roman_hash)
+  print "Enter how many creadit details :"
+  number = gets.chomp.to_i
+  for i in 1..number
+    print "Enter #{i} Credit Input:"
+    credit_input = gets.chomp.upcase
+    begin
+      credit_array = credit_input.sub("CREDITS","").split(" ")
+      credit_array.delete_at(-2)
+      credit_result = 0
+      if credit_array.length < 1
+        raise "Invalid Input"
+      # if credits array has only 2 elements
+    elsif credit_array.length == 2 && !hash.has_key?(credit_array.first)
+      hash[credit_array.first] = credit_array.last
+      new_roman_hash[credit_array.first] = credit_array.last
+    else
+        # get key and value to calculate
+        result_val = credit_array.pop.to_i
+        result_key = credit_array.pop
+        # check if all the element exist
+        if credit_array.uniq == (hash.keys & credit_array.uniq)
+          # calculate roman number
+          temp = calculate(credit_array,hash,new_roman_hash)
+          if !temp
+            raise " Invalid roman number "
+          else
+            # calculate result
+            credit_result = result_val/temp
+            hash[result_key] = credit_result
+            new_roman_hash[result_key] = credit_result
+            p hash
+          end
+        else
+          raise "Invalid input ......."
+        end
+      end
+    rescue Exception => e
+      puts "#{e.message}"
+    end
+  end
+end
+
+def calculate_expression(hash,new_roman_hash)
+  print "Enter how many Expression :"
+  number = gets.chomp.to_i
+  for i in 1..number
+    puts "Enter #{i} Expression "
+    test_expression = gets.chomp.upcase
+    result_array = []
+    begin
+      result_array = test_expression.slice(test_expression.index("IS")..-1).
+      gsub("?","").sub("IS","").split(" ")
+
+      if new_roman_hash.has_key?(result_array.last)
+        temp = hash[result_array.pop]
+        result = calculate(result_array,hash,new_roman_hash)
+        # raise exception if invalid roman number
+        if result
+          puts "#{result_array.join(" ").downcase} is #{result * temp } Credits"
+        else
+          raise
+        end
+      else
+        result = calculate(result_array,hash,new_roman_hash)
+        # raise exception if invalid roman number
+        if result
+          puts "#{result_array.join(" ").downcase} is #{result}"
+        else
+          raise
+        end
+      end
+    rescue
+      puts "I have no idea what you are talking about"
+    end
+  end
+end
+
+loop do
+  sleep 0.1
+  puts "1. Roman to Decimal Conversion"
+  puts "2. Get Test Input"
+  puts "3. Get Credit Details"
+  puts "4. Solve Expression"
+  puts "5. Display Roman number "
+  puts "6. Exit"
+  puts "-----------------------------------------------------------------------"
+  print "Enter you choice :"
+  choice = gets.chomp.to_i
+  case choice
+  when 1 then
+    print "Enter Roman Number :"
+    number = gets.chomp.upcase.split("")
+    result = calculate(number,hash,new_roman_hash)
+    puts "Roman number is : #{result}" if result
+    puts "---------------------------------------------------------------------"
+  when 2
+    get_test_input(hash,new_roman_hash)
+     puts "---------------------------------------------------------------------"
+  when 3
+    get_credits_details(hash,new_roman_hash)
+     puts "---------------------------------------------------------------------"
+  when 4
+    calculate_expression(hash,new_roman_hash)
+     puts "---------------------------------------------------------------------"
+  when 5
+    p hash
+    puts "---------------------------------------------------------------------"
+  when 6 then break
   else
-    puts "!!!! Invalid Expression !!!!!"
-  end
-end
-p hash
-puts "---------------------------------------------------------------------"
-
-print "Enter how many Expression :"
-number = gets.chomp.to_i
-for i in 1..number
-  puts "Enter #{i}Expression "
-  test_expression = gets.chomp.upcase
-  result_array = []
-  begin
-    result_array = test_expression.slice(test_expression.index("IS")..-1).gsub("?","").sub("IS","").split(" ")
-    max = 0
-    result = 0
-    for key in 0...result_array.length - 1
-      if hash.include?(result_array[key])
-        hash[result_array[key]] > max ?
-        result = hash[result_array[key]] - result :
-        result += hash[result_array[key]]
-        max = hash[result_array[key]]
-      else
-        raise
-      end
-    end
-    if test_hash.include?(result_array[-1])
-      puts "#{result_array.join(" ").downcase} is #{result * hash[result_array[-1]]} Credits"
-    else
-      puts "#{result_array.join(" ").downcase} is #{result}"
-    end
-  rescue
-    puts "I have no idea what you are talking about"
+    puts "Please Provide valid Input .."
+    puts "-----------------------------------"
   end
 end
